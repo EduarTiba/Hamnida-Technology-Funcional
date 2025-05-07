@@ -1,6 +1,6 @@
 // main.js (modo local)
-const apiUrl = 'http://localhost:5000/api/services';
-const agendamientoUrl = 'http://localhost:5000/api/agendamientos';
+const apiUrl = 'https://hamnida-tech.onrender.com/api/agendamientos';
+const agendamientoUrl = 'https://hamnida-tech.onrender.com/api/agendamientos';
 const serviceList = document.getElementById('service-list');
 const userStatus = document.getElementById('user-status');
 const userActions = document.getElementById('user-actions');
@@ -155,7 +155,7 @@ function agendarServicio(service) {
     return;
   }
 
-  fetch('http://localhost:5000/api/agendamientos', {
+  fetch('https://hamnida-tech.onrender.com/api/agendamientos', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

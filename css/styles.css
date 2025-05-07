@@ -1,0 +1,415 @@
+
+/* === Reset y fuentes === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* === Colores base === */
+:root {
+  --bg-color: #f4f6f8;
+  --text-color: #1a1a1a;
+  --primary-color: #0a74da;
+  --accent-color: #e0e0e0;
+  --shadow: rgba(0, 0, 0, 0.05);
+}
+
+/* === Estilo general === */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 20px;
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  margin-bottom: 0.5em;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px var(--shadow);
+}
+
+/* === Formularios === */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, select, textarea {
+  padding: 10px;
+  border: 1px solid var(--accent-color);
+  border-radius: 5px;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #085ec2;
+}
+
+/* Validación formulario Registro */
+.input-error {
+  border: 2px solid #e74c3c;
+  background-color: #fff4f4;
+}
+
+.input-success {
+  border: 2px solid #2ecc71;
+  background-color: #eaffea;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9em;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+
+/* === Tablas de servicio === */
+
+
+#services-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#services-table th, #services-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+#services-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+#services-table button {
+  padding: 6px 10px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#services-table button:hover {
+  background-color: #085ec2;
+}
+
+
+/* === Carrito === */
+#cart-items {
+  list-style: none;
+  padding-left: 0;
+}
+
+#cart-items li {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/* === Agrupación de campos === */
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Estilo de mensajes de error === */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9em;
+  margin-top: 4px;
+  margin-left: 2px;
+  display: block;
+}
+
+/* === Campo con error === */
+.input-error {
+  border: 2px solid #e74c3c;
+  background-color: #fff2f2;
+  outline: none;
+}
+
+/* === Campo validado correctamente (opcional) === */
+.input-success {
+  border: 2px solid #2ecc71;
+  background-color: #f0fff5;
+}
+
+/*Usuario login*/
+#user-status p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+#user-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+#user-actions button {
+  padding: 8px 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  background-color: #0a74da;
+  color: white;
+  cursor: pointer;
+}
+
+#user-actions button:hover {
+  background-color: #095aba;
+}
+
+/* Boton Cerrar sesión */
+.user-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.user-bar button {
+  padding: 6px 10px;
+  background-color: #0a74da;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.user-bar button:hover {
+  background-color: #085cb0;
+}
+
+
+/* === Navegación o acciones === */
+nav, .actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Mis agendamientnos Styling */
+/* Tabla de agendamientos */
+.agendamientos-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.agendamientos-table th, .agendamientos-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.agendamientos-table th {
+  background-color: #f4f6f8;
+  font-weight: bold;
+  color: #333;
+}
+
+.agendamientos-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Botones de acción */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  margin: 2px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.btn-icon.edit {
+  background-color: #007bff;
+}
+
+.btn-icon.edit:hover {
+  background-color: #0056b3;
+}
+
+.btn-icon.delete {
+  background-color: #dc3545;
+}
+
+.btn-icon.delete:hover {
+  background-color: #a71d2a;
+}
+
+.btn-icon i {
+  font-style: normal;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .agendamientos-table th, .agendamientos-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* Modal base */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: auto;
+}
+
+/* Contenido */
+.modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+  position: relative;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* Cerrar */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Grupos de inputs */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 10px 12px 40px;
+  border: none;
+  border-bottom: 2px solid var(--primary-color);
+  background: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.input-group label {
+  position: absolute;
+  top: 12px;
+  left: 40px;
+  color: gray;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -12px;
+  font-size: 12px;
+  color: var(--primary-color);
+}
+
+/* Íconos */
+.input-group .icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  font-size: 16px;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+}
+
+/* Botón principal */
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background: #085ec2;
+}
+
+/* Estilo Tabla servicios */
+
+.btn-icon {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-icon i {
+  pointer-events: none;
+  justify-content: center;
+}
+
+
+@media screen and (max-width: 1024px) {
+  .container {
+    margin: 10px;
+  }
+}
+
+

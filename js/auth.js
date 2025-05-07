@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = document.getElementById('email');
       const password = document.getElementById('password');
       const registerMsg = document.getElementById('register-message');
-      const role = document.getElementById('role');
 
       if (!soloLetras.test(name.value.trim()) || !correoValido.test(email.value.trim()) || password.value.length < 6) {
         registerMsg.textContent = 'Datos inválidos o incompletos.';
@@ -75,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
             name: name.value,
             email: email.value,
             password: password.value,
-            role: role.value
           })
         });
 

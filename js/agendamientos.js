@@ -54,7 +54,7 @@ function editarFecha(id) {
   const nuevaFecha = prompt('Ingresa nueva fecha (YYYY-MM-DD HH:mm):');
   if (!nuevaFecha) return;
 
-  fetch(`https://hamnida-tech.onrender.com/api/agendamientos${id}`, {
+  fetch(`https://hamnida-tech.onrender.com/api/agendamientos/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ function editarFecha(id) {
 function eliminarAgendamiento(id) {
   if (!confirm('¿Seguro que deseas eliminar este agendamiento?')) return;
 
-  fetch(`https://hamnida-tech.onrender.com/api/agendamientos${id}`, {
+  fetch(`https://hamnida-tech.onrender.com/api/agendamientos/${id}`, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer ' + token

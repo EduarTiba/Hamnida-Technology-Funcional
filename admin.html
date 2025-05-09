@@ -1,12 +1,52 @@
-<!-- admin.html -->
-<h2>Administrar Servicios</h2>
-<ul id="services-list">
-  <!-- Aquí se mostrarán los servicios -->
-</ul>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administrador</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Panel de Administrador</h1>
 
-<h2>Administrar Usuarios</h2>
-<ul id="users-list">
-  <!-- Aquí se mostrarán los usuarios -->
-</ul>
+  <section>
+    <h2>Usuarios Registrados</h2>
+    <table id="users-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
 
-<script src="js/admin.js"></script>
+  <section>
+    <h2>Gestión de Servicios</h2>
+    <form id="nuevo-servicio-form">
+      <input type="text" id="name" placeholder="Nombre del servicio" required>
+      <textarea id="description" placeholder="Descripción" required></textarea>
+      <input type="number" id="price" placeholder="Precio" required>
+      <button type="submit">Agregar Servicio</button>
+    </form>
+
+    <table id="servicios-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <script src="admin.js"></script>
+</body>
+</html>
+

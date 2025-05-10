@@ -108,3 +108,41 @@ function eliminarAgendamiento(id) {
       console.error(err);
     });
 }
+
+//Selector de fecha
+
+let agendamientoIdActual = null;
+
+function editarFecha(id) {
+  agendamientoIdActual = id;
+  document.getElementById('fecha-modal').style.display = 'block';
+}
+
+function cerrarModal() {
+  document.getElementById('fecha-modal').style.display = 'none';
+  agendamientoIdActual = null;
+}
+
+function guardarNuevaFecha() {
+  const nuevaFecha = document.getElementById('nueva-fecha').value;
+  if (!nuevaFecha || !agendamientoIdActual) return;
+
+  fetch(`https://hamnida-tech.onrender.com/api/agendamientos/${agendamientoIdActual}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({ fecha: nuevaFecha })
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert('Fecha actualizada');
+      cerrarModal();
+      location.reload();
+    })
+    .catch(err => {
+      alert('Error al editar la fecha.');
+      console.error(err);
+    });
+}

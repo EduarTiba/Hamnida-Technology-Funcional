@@ -1,121 +1,109 @@
+const apiUrl = 'https://hamnida-tech.onrender.com/api';
 const token = localStorage.getItem('token');
-const role = localStorage.getItem('userRole');
+const userRole = localStorage.getItem('userRole');
 
-// Redirigir si no es admin
-if (!token || role !== 'admin') {
+// Redirige si no es admin
+if (userRole !== 'admin') {
   alert('Acceso denegado. Solo administradores.');
   window.location.href = 'index.html';
 }
 
-// API base
-const apiBase = window.location.hostname === 'localhost'
-  ? 'http://localhost:5000/api'
-  : 'https://hamnida-tech.onrender.com/api';
+const usuariosBody = document.querySelector('#usuarios-table tbody');
+const serviciosBody = document.querySelector('#servicios-table tbody');
+const servicioForm = document.getElementById('servicio-form');
 
-// ======= USUARIOS =======
-const usuariosList = document.getElementById('usuarios-list');
+// Cargar usuarios
+fetch(`${apiUrl}/users`, {
+  headers: { 'Authorization': 'Bearer ' + token }
+})
+  .then(res => res.json())
+  .then(users => {
+    users.forEach(user => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>${user.role}</td>
+        <td><button onclick="eliminarUsuario('${user._id}')">Eliminar</button></td>
+      `;
+      usuariosBody.appendChild(row);
+    });
+  });
 
-function cargarUsuarios() {
-  fetch(`${apiBase}/users`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
-    .then(res => res.json())
-    .then(users => {
-      usuariosList.innerHTML = '';
-      users.forEach(user => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>${user.name}</strong> - ${user.email} (${user.role})
-          <button onclick="eliminarUsuario('${user._id}')">Eliminar</button>
-        `;
-        usuariosList.appendChild(li);
-      });
-    })
-    .catch(err => console.error('Error al cargar usuarios:', err));
-}
-
+// Eliminar usuario
 function eliminarUsuario(id) {
   if (!confirm('¿Eliminar este usuario?')) return;
-
-  fetch(`${apiBase}/users/${id}`, {
+  fetch(`${apiUrl}/users/${id}`, {
     method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { 'Authorization': 'Bearer ' + token }
   })
-    .then(res => res.json())
-    .then(data => {
-      alert(data.msg || 'Usuario eliminado');
-      cargarUsuarios();
-    })
-    .catch(err => console.error('Error al eliminar:', err));
+    .then(() => location.reload())
+    .catch(err => console.error(err));
 }
 
-// ======= SERVICIOS =======
-const servicioForm = document.getElementById('servicio-form');
-const serviciosList = document.getElementById('servicios-list');
+// Cargar servicios
+fetch(`${apiUrl}/servicios`)
+  .then(res => res.json())
+  .then(servicios => {
+    servicios.forEach(s => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${s.name}</td>
+        <td>${s.description}</td>
+        <td>$${s.price}</td>
+        <td>
+          <button onclick="editarServicio('${s._id}', '${s.name}', '${s.description}', ${s.price})">Editar</button>
+          <button onclick="eliminarServicio('${s._id}')">Eliminar</button>
+        </td>
+      `;
+      serviciosBody.appendChild(row);
+    });
+  });
 
+// Agregar servicio
 servicioForm.addEventListener('submit', e => {
   e.preventDefault();
+  const servicio = {
+    name: document.getElementById('nombre').value,
+    description: document.getElementById('descripcion').value,
+    price: document.getElementById('precio').value
+  };
 
-  const name = document.getElementById('servicio-nombre').value.trim();
-  const description = document.getElementById('servicio-descripcion').value.trim();
-  const price = parseFloat(document.getElementById('servicio-precio').value);
-
-  if (!name || !description || isNaN(price)) {
-    alert('Datos inválidos');
-    return;
-  }
-
-  fetch(`${apiBase}/servicios`, {
+  fetch(`${apiUrl}/servicios`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Authorization': 'Bearer ' + token
     },
-    body: JSON.stringify({ name, description, price })
-  })
-    .then(res => res.json())
-    .then(data => {
-      alert('Servicio agregado');
-      servicioForm.reset();
-      cargarServicios();
-    })
-    .catch(err => console.error('Error al agregar servicio:', err));
+    body: JSON.stringify(servicio)
+  }).then(() => location.reload());
 });
 
-function cargarServicios() {
-  fetch(`${apiBase}/servicios`)
-    .then(res => res.json())
-    .then(servicios => {
-      serviciosList.innerHTML = '';
-      servicios.forEach(serv => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>${serv.name}</strong>: ${serv.description} - $${serv.price}
-          <button onclick="eliminarServicio('${serv._id}')">Eliminar</button>
-        `;
-        serviciosList.appendChild(li);
-      });
-    })
-    .catch(err => console.error('Error al cargar servicios:', err));
-}
-
+// Eliminar servicio
 function eliminarServicio(id) {
   if (!confirm('¿Eliminar este servicio?')) return;
-
-  fetch(`${apiBase}/servicios/${id}`, {
+  fetch(`${apiUrl}/servicios/${id}`, {
     method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` }
-  })
-    .then(res => res.json())
-    .then(data => {
-      alert(data.msg || 'Servicio eliminado');
-      cargarServicios();
-    })
-    .catch(err => console.error('Error al eliminar servicio:', err));
+    headers: { 'Authorization': 'Bearer ' + token }
+  }).then(() => location.reload());
 }
 
-// Cargar al iniciar
-document.addEventListener('DOMContentLoaded', () => {
-  cargarUsuarios();
-  cargarServicios();
-});
+// Editar servicio (simple)
+function editarServicio(id, nombre, descripcion, precio) {
+  const nuevoNombre = prompt('Nuevo nombre:', nombre);
+  const nuevaDescripcion = prompt('Nueva descripción:', descripcion);
+  const nuevoPrecio = prompt('Nuevo precio:', precio);
+
+  fetch(`${apiUrl}/servicios/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({
+      name: nuevoNombre,
+      description: nuevaDescripcion,
+      price: nuevoPrecio
+    })
+  }).then(() => location.reload());
+}

@@ -1,81 +1,121 @@
+const token = localStorage.getItem('token');
+const role = localStorage.getItem('userRole');
+
+// Redirigir si no es admin
+if (!token || role !== 'admin') {
+  alert('Acceso denegado. Solo administradores.');
+  window.location.href = 'index.html';
+}
+
+// API base
+const apiBase = window.location.hostname === 'localhost'
+  ? 'http://localhost:5000/api'
+  : 'https://hamnida-tech.onrender.com/api';
+
+// ======= USUARIOS =======
+const usuariosList = document.getElementById('usuarios-list');
+
+function cargarUsuarios() {
+  fetch(`${apiBase}/users`, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then(res => res.json())
+    .then(users => {
+      usuariosList.innerHTML = '';
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${user.name}</strong> - ${user.email} (${user.role})
+          <button onclick="eliminarUsuario('${user._id}')">Eliminar</button>
+        `;
+        usuariosList.appendChild(li);
+      });
+    })
+    .catch(err => console.error('Error al cargar usuarios:', err));
+}
+
+function eliminarUsuario(id) {
+  if (!confirm('¿Eliminar este usuario?')) return;
+
+  fetch(`${apiBase}/users/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.msg || 'Usuario eliminado');
+      cargarUsuarios();
+    })
+    .catch(err => console.error('Error al eliminar:', err));
+}
+
+// ======= SERVICIOS =======
+const servicioForm = document.getElementById('servicio-form');
+const serviciosList = document.getElementById('servicios-list');
+
+servicioForm.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const name = document.getElementById('servicio-nombre').value.trim();
+  const description = document.getElementById('servicio-descripcion').value.trim();
+  const price = parseFloat(document.getElementById('servicio-precio').value);
+
+  if (!name || !description || isNaN(price)) {
+    alert('Datos inválidos');
+    return;
+  }
+
+  fetch(`${apiBase}/servicios`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ name, description, price })
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert('Servicio agregado');
+      servicioForm.reset();
+      cargarServicios();
+    })
+    .catch(err => console.error('Error al agregar servicio:', err));
+});
+
+function cargarServicios() {
+  fetch(`${apiBase}/servicios`)
+    .then(res => res.json())
+    .then(servicios => {
+      serviciosList.innerHTML = '';
+      servicios.forEach(serv => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${serv.name}</strong>: ${serv.description} - $${serv.price}
+          <button onclick="eliminarServicio('${serv._id}')">Eliminar</button>
+        `;
+        serviciosList.appendChild(li);
+      });
+    })
+    .catch(err => console.error('Error al cargar servicios:', err));
+}
+
+function eliminarServicio(id) {
+  if (!confirm('¿Eliminar este servicio?')) return;
+
+  fetch(`${apiBase}/servicios/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.msg || 'Servicio eliminado');
+      cargarServicios();
+    })
+    .catch(err => console.error('Error al eliminar servicio:', err));
+}
+
+// Cargar al iniciar
 document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const servicesList = document.getElementById('services-list');
-    const usersList = document.getElementById('users-list');
-  
-    if (!token) {
-      alert('Debes iniciar sesión para acceder a la administración.');
-      window.location.href = 'login.html';
-      return;
-    }
-  
-    // Obtener los servicios y usuarios desde la API
-    const getServices = async () => {
-      try {
-        const res = await fetch('http://localhost:5000/api/services', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const services = await res.json();
-        servicesList.innerHTML = services.map(service => `
-          <li>
-            ${service.name} - ${service.price}€
-            <button onclick="deleteService('${service._id}')">Eliminar</button>
-          </li>
-        `).join('');
-      } catch (error) {
-        console.error('Error obteniendo servicios:', error);
-      }
-    };
-  
-    const getUsers = async () => {
-      try {
-        const res = await fetch('http://localhost:5000/api/users', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const users = await res.json();
-        usersList.innerHTML = users.map(user => `
-          <li>
-            ${user.name} - ${user.email}
-            <button onclick="deleteUser('${user._id}')">Eliminar</button>
-          </li>
-        `).join('');
-      } catch (error) {
-        console.error('Error obteniendo usuarios:', error);
-      }
-    };
-  
-    // Eliminar servicio
-    const deleteService = async (id) => {
-      const res = await fetch(`http://localhost:5000/api/services/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert('Servicio eliminado.');
-        getServices();  // Refrescar lista de servicios
-      } else {
-        alert('Error al eliminar el servicio.');
-      }
-    };
-  
-    // Eliminar usuario
-    const deleteUser = async (id) => {
-      const res = await fetch(`http://localhost:5000/api/users/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert('Usuario eliminado.');
-        getUsers();  // Refrescar lista de usuarios
-      } else {
-        alert('Error al eliminar el usuario.');
-      }
-    };
-  
-    // Cargar los servicios y usuarios al cargar la página
-    getServices();
-    getUsers();
-  });
-  
+  cargarUsuarios();
+  cargarServicios();
+});

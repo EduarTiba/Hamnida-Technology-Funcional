@@ -6,6 +6,7 @@ if (!token) {
   window.location.href = 'login.html';
 }
 
+// Obtener y renderizar los agendamientos
 fetch('https://hamnida-tech.onrender.com/api/agendamientos', {
   headers: {
     'Authorization': 'Bearer ' + token
@@ -34,10 +35,15 @@ fetch('https://hamnida-tech.onrender.com/api/agendamientos', {
           <td>${servicio.name}</td>
           <td>${servicio.description}</td>
           <td>$${servicio.price}</td>
-          <td>${fecha}</td>
+          <td id="fecha-${agendamiento._id}">${fecha}</td>
           <td>
-            <button class="edit-btn" onclick="editarFecha('${agendamiento._id}')" title="Editar fecha">🖉</button>
+            <button class="edit-btn" onclick="mostrarSelectorFecha('${agendamiento._id}')" title="Editar fecha">🖉</button>
             <button class="delete-btn" onclick="eliminarAgendamiento('${agendamiento._id}')" title="Eliminar">🗑</button>
+            <div id="selector-${agendamiento._id}" class="fecha-selector" style="display:none; margin-top: 5px;">
+              <input type="datetime-local" id="input-${agendamiento._id}" />
+              <button onclick="guardarNuevaFecha('${agendamiento._id}')">Guardar</button>
+              <button onclick="cancelarEdicion('${agendamiento._id}')">Cancelar</button>
+            </div>
           </td>
         `;
         tablaBody.appendChild(fila);
@@ -49,10 +55,20 @@ fetch('https://hamnida-tech.onrender.com/api/agendamientos', {
     tablaBody.innerHTML = '<tr><td colspan="5">Error al cargar agendamientos.</td></tr>';
   });
 
+function mostrarSelectorFecha(id) {
+  document.getElementById(`selector-${id}`).style.display = 'block';
+}
 
-function editarFecha(id) {
-  const nuevaFecha = prompt('Ingresa nueva fecha (YYYY-MM-DD HH:mm):');
-  if (!nuevaFecha) return;
+function cancelarEdicion(id) {
+  document.getElementById(`selector-${id}`).style.display = 'none';
+}
+
+function guardarNuevaFecha(id) {
+  const nuevaFecha = document.getElementById(`input-${id}`).value;
+  if (!nuevaFecha) {
+    alert('Por favor selecciona una fecha.');
+    return;
+  }
 
   fetch(`https://hamnida-tech.onrender.com/api/agendamientos/${id}`, {
     method: 'PUT',
@@ -64,11 +80,11 @@ function editarFecha(id) {
   })
     .then(res => res.json())
     .then(data => {
-      alert('Fecha actualizada');
+      alert('Fecha actualizada correctamente.');
       location.reload();
     })
     .catch(err => {
-      alert('Error al editar la fecha.');
+      alert('Error al actualizar la fecha.');
       console.error(err);
     });
 }

@@ -2,51 +2,43 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Administrador</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/minimal.css">
 </head>
 <body>
-  <h1>Panel de Administrador</h1>
+  <header class="navbar">
+    <div class="logo">Panel de Administración</div>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <button id="logout-btn" class="btn-header">Cerrar sesión</button>
+    </nav>
+  </header>
 
-  <section>
-    <h2>Usuarios Registrados</h2>
-    <table id="users-table">
+  <main class="container">
+    <h1>Usuarios registrados</h1>
+    <table id="usuarios-table">
       <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Rol</th>
-          <th>Acción</th>
-        </tr>
+        <tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th></tr>
       </thead>
       <tbody></tbody>
     </table>
-  </section>
 
-  <section>
-    <h2>Gestión de Servicios</h2>
-    <form id="nuevo-servicio-form">
-      <input type="text" id="name" placeholder="Nombre del servicio" required>
-      <textarea id="description" placeholder="Descripción" required></textarea>
-      <input type="number" id="price" placeholder="Precio" required>
-      <button type="submit">Agregar Servicio</button>
+    <h2>Servicios</h2>
+    <form id="servicio-form">
+      <input type="text" id="nombre" placeholder="Nombre del servicio" required>
+      <input type="text" id="descripcion" placeholder="Descripción" required>
+      <input type="number" id="precio" placeholder="Precio" required>
+      <button type="submit">Agregar servicio</button>
     </form>
 
     <table id="servicios-table">
       <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Acción</th>
-        </tr>
+        <tr><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Acciones</th></tr>
       </thead>
       <tbody></tbody>
     </table>
-  </section>
+  </main>
 
-  <script src="admin.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>
-

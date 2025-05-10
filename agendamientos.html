@@ -49,12 +49,16 @@
   </div>
 </section> 
 
-<!-- Selector de fecha oculto inicialmente -->
-<div id="fecha-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1000;">
-  <label for="nueva-fecha">Selecciona nueva fecha:</label><br>
-  <input type="datetime-local" id="nueva-fecha"><br><br>
-  <button onclick="guardarNuevaFecha()">Guardar</button>
-  <button onclick="cerrarModal()">Cancelar</button>
+<!-- Selector de fecha -->
+<div id="modal-fecha" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h2>Editar Fecha</h2>
+    <input type="datetime-local" id="nueva-fecha" />
+    <div class="modal-actions">
+      <button onclick="confirmarFecha()">Guardar</button>
+      <button onclick="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
 </div>
 
   <script src="js/agendamientos.js"></script>

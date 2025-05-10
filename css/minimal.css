@@ -376,3 +376,25 @@ input::placeholder {
   color: #666;
 }
 
+/*Estilo Selector Fecha*/
+.fecha-selector input {
+  padding: 4px;
+  margin-right: 4px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.fecha-selector button {
+  padding: 4px 8px;
+  margin-right: 4px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fecha-selector button:hover {
+  background-color: #0056b3;
+}
+

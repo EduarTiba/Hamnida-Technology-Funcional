@@ -5,6 +5,32 @@
   <title>Mis Agendamientos</title>
   <link rel="stylesheet" href="css/minimal.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
+  <style>
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .modal-actions {
+      margin-top: 1rem;
+    }
+
+    .modal-actions button {
+      margin: 0 0.5rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -19,47 +45,41 @@
       <button id="logout-btn" style="display: none;" class="btn-header" title="Cerrar sesión">
         <i class="fas fa-door-open"></i>
       </button>
-          </nav>
+    </nav>
   </header>
 
- <section class="hero">
-  <div class="container-agendamientos">
-    <h1 class="agendamientos">Agendamientos</h1>
-    <!-- Formulario Selección Fecha -->
-<form id="agendar-fecha-form" style="margin-bottom: 1em;">
-  <label for="fecha">Selecciona una fecha:</label>
-  <input type="datetime-local" id="fecha" name="fecha" required>
-  <button type="submit" class="btn">Agendar fecha</button>
-</form>
-    <table>
-      <thead>
-        <tr class="table">
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Fecha</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="agendamientos-list">
-        <!-- Agendamientos serán insertados aquí -->
-      </tbody>
-    </table>
-    <button onclick="location.href='index.html'" class="btn">Volver al inicio</button>
-  </div>
-</section> 
+  <section class="hero">
+    <div class="container-agendamientos">
+      <h1 class="agendamientos">Agendamientos</h1>
+      <table>
+        <thead>
+          <tr class="table">
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="agendamientos-list">
+          <!-- Agendamientos serán insertados aquí -->
+        </tbody>
+      </table>
+      <button onclick="location.href='index.html'" class="btn">Volver al inicio</button>
+    </div>
+  </section> 
 
-<!-- Selector de fecha -->
-<div id="modal-fecha" class="modal" style="display: none;">
-  <div class="modal-content">
-    <h2>Editar Fecha</h2>
-    <input type="datetime-local" id="nueva-fecha" />
-    <div class="modal-actions">
-      <button onclick="confirmarFecha()">Guardar</button>
-      <button onclick="cerrarModal()">Cancelar</button>
+  <!-- Modal para editar fecha -->
+  <div id="modal-fecha" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h2>Editar Fecha</h2>
+      <input type="datetime-local" id="nueva-fecha" />
+      <div class="modal-actions">
+        <button onclick="guardarNuevaFecha()">Guardar</button>
+        <button onclick="cerrarModal()">Cancelar</button>
+      </div>
     </div>
   </div>
-</div>
 
   <script src="js/agendamientos.js"></script>
   <script src="js/navbar.js"></script>

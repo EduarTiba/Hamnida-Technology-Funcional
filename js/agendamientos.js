@@ -1,12 +1,12 @@
 const tablaBody = document.getElementById('agendamientos-list');
 const token = localStorage.getItem('token');
+let agendamientoSeleccionado = null;
 
 if (!token) {
   alert('Debes iniciar sesión para ver tus agendamientos.');
   window.location.href = 'login.html';
 }
 
-// Obtener y renderizar los agendamientos
 fetch('https://hamnida-tech.onrender.com/api/agendamientos', {
   headers: {
     'Authorization': 'Bearer ' + token
@@ -35,15 +35,10 @@ fetch('https://hamnida-tech.onrender.com/api/agendamientos', {
           <td>${servicio.name}</td>
           <td>${servicio.description}</td>
           <td>$${servicio.price}</td>
-          <td id="fecha-${agendamiento._id}">${fecha}</td>
+          <td>${fecha}</td>
           <td>
-            <button class="edit-btn" onclick="mostrarSelectorFecha('${agendamiento._id}')" title="Editar fecha">🖉</button>
+            <button class="edit-btn" onclick="mostrarModal('${agendamiento._id}')" title="Editar fecha">🖉</button>
             <button class="delete-btn" onclick="eliminarAgendamiento('${agendamiento._id}')" title="Eliminar">🗑</button>
-            <div id="selector-${agendamiento._id}" class="fecha-selector" style="display:none; margin-top: 5px;">
-              <input type="datetime-local" id="input-${agendamiento._id}" />
-              <button onclick="guardarNuevaFecha('${agendamiento._id}')">Guardar</button>
-              <button onclick="cancelarEdicion('${agendamiento._id}')">Cancelar</button>
-            </div>
           </td>
         `;
         tablaBody.appendChild(fila);
@@ -55,22 +50,22 @@ fetch('https://hamnida-tech.onrender.com/api/agendamientos', {
     tablaBody.innerHTML = '<tr><td colspan="5">Error al cargar agendamientos.</td></tr>';
   });
 
-function mostrarSelectorFecha(id) {
-  document.getElementById(`selector-${id}`).style.display = 'block';
+// Modal de edición
+function mostrarModal(id) {
+  agendamientoSeleccionado = id;
+  document.getElementById('modal-fecha').style.display = 'flex';
 }
 
-function cancelarEdicion(id) {
-  document.getElementById(`selector-${id}`).style.display = 'none';
+function cerrarModal() {
+  agendamientoSeleccionado = null;
+  document.getElementById('modal-fecha').style.display = 'none';
 }
 
-function guardarNuevaFecha(id) {
-  const nuevaFecha = document.getElementById(`input-${id}`).value;
-  if (!nuevaFecha) {
-    alert('Por favor selecciona una fecha.');
-    return;
-  }
+function confirmarFecha() {
+  const nuevaFecha = document.getElementById('nueva-fecha').value;
+  if (!nuevaFecha || !agendamientoSeleccionado) return;
 
-  fetch(`https://hamnida-tech.onrender.com/api/agendamientos/${id}`, {
+  fetch(`https://hamnida-tech.onrender.com/api/agendamientos/${agendamientoSeleccionado}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -80,11 +75,12 @@ function guardarNuevaFecha(id) {
   })
     .then(res => res.json())
     .then(data => {
-      alert('Fecha actualizada correctamente.');
+      alert('Fecha actualizada');
+      cerrarModal();
       location.reload();
     })
     .catch(err => {
-      alert('Error al actualizar la fecha.');
+      alert('Error al editar la fecha.');
       console.error(err);
     });
 }
@@ -105,44 +101,6 @@ function eliminarAgendamiento(id) {
     })
     .catch(err => {
       alert('Error al eliminar el agendamiento.');
-      console.error(err);
-    });
-}
-
-//Selector de fecha
-
-let agendamientoIdActual = null;
-
-function editarFecha(id) {
-  agendamientoIdActual = id;
-  document.getElementById('fecha-modal').style.display = 'block';
-}
-
-function cerrarModal() {
-  document.getElementById('fecha-modal').style.display = 'none';
-  agendamientoIdActual = null;
-}
-
-function guardarNuevaFecha() {
-  const nuevaFecha = document.getElementById('nueva-fecha').value;
-  if (!nuevaFecha || !agendamientoIdActual) return;
-
-  fetch(`https://hamnida-tech.onrender.com/api/agendamientos/${agendamientoIdActual}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({ fecha: nuevaFecha })
-  })
-    .then(res => res.json())
-    .then(data => {
-      alert('Fecha actualizada');
-      cerrarModal();
-      location.reload();
-    })
-    .catch(err => {
-      alert('Error al editar la fecha.');
       console.error(err);
     });
 }

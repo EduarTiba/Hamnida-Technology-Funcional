@@ -6,6 +6,7 @@ require('dotenv').config();
 const userRoutes = require('./routes/user.routes');
 const serviceRoutes = require('./routes/service.routes');
 const agendamientoRoutes = require('./routes/agendamiento.routes');
+const adminRoutes = require('./routes/admin.routes');
 
 const app = express();
 
@@ -33,5 +34,6 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/agendamientos', agendamientoRoutes);
+app.use('/api/admin', adminRoutes);
 
 module.exports = app;

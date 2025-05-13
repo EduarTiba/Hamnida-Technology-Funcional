@@ -1,109 +1,97 @@
-const apiUrl = 'https://hamnida-tech.onrender.com/api';
 const token = localStorage.getItem('token');
-const userRole = localStorage.getItem('userRole');
+const API = 'https://hamnida-tech.onrender.com/api';
 
-// Redirige si no es admin
-if (userRole !== 'admin') {
-  alert('Acceso denegado. Solo administradores.');
-  window.location.href = 'index.html';
+if (!token) {
+  alert('Acceso denegado. Inicia sesión como administrador.');
+  window.location.href = 'login.html';
 }
 
-const usuariosBody = document.querySelector('#usuarios-table tbody');
-const serviciosBody = document.querySelector('#servicios-table tbody');
-const servicioForm = document.getElementById('servicio-form');
+function mostrarSeccion(seccion) {
+  document.getElementById('usuarios-section').style.display = 'none';
+  document.getElementById('servicios-section').style.display = 'none';
+  document.getElementById(`${seccion}-section`).style.display = 'block';
+}
 
-// Cargar usuarios
-fetch(`${apiUrl}/users`, {
-  headers: { 'Authorization': 'Bearer ' + token }
+document.getElementById('logout-btn').addEventListener('click', () => {
+  localStorage.removeItem('token');
+  window.location.href = 'login.html';
+});
+
+// === Usuarios ===
+fetch(`${API}/usuarios`, {
+  headers: { Authorization: `Bearer ${token}` }
 })
   .then(res => res.json())
-  .then(users => {
-    users.forEach(user => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${user.name}</td>
+  .then(usuarios => {
+    const tbody = document.getElementById('usuarios-list');
+    usuarios.forEach(user => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
         <td>${user.email}</td>
         <td>${user.role}</td>
-        <td><button onclick="eliminarUsuario('${user._id}')">Eliminar</button></td>
-      `;
-      usuariosBody.appendChild(row);
+        <td>
+          <button onclick="eliminarUsuario('${user._id}')">Eliminar</button>
+        </td>`;
+      tbody.appendChild(tr);
     });
   });
 
-// Eliminar usuario
 function eliminarUsuario(id) {
   if (!confirm('¿Eliminar este usuario?')) return;
-  fetch(`${apiUrl}/users/${id}`, {
+  fetch(`${API}/usuarios/${id}`, {
     method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + token }
+    headers: { Authorization: `Bearer ${token}` }
   })
+    .then(res => res.json())
     .then(() => location.reload())
-    .catch(err => console.error(err));
+    .catch(err => alert('Error al eliminar usuario.'));
 }
 
-// Cargar servicios
-fetch(`${apiUrl}/servicios`)
+// === Servicios ===
+fetch(`${API}/servicios`)
   .then(res => res.json())
   .then(servicios => {
-    servicios.forEach(s => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${s.name}</td>
-        <td>${s.description}</td>
-        <td>$${s.price}</td>
+    const tbody = document.getElementById('servicios-list');
+    servicios.forEach(servicio => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${servicio.name}</td>
+        <td>${servicio.description}</td>
+        <td>$${servicio.price}</td>
         <td>
-          <button onclick="editarServicio('${s._id}', '${s.name}', '${s.description}', ${s.price})">Editar</button>
-          <button onclick="eliminarServicio('${s._id}')">Eliminar</button>
-        </td>
-      `;
-      serviciosBody.appendChild(row);
+          <button onclick="eliminarServicio('${servicio._id}')">Eliminar</button>
+        </td>`;
+      tbody.appendChild(tr);
     });
   });
 
-// Agregar servicio
-servicioForm.addEventListener('submit', e => {
+function eliminarServicio(id) {
+  if (!confirm('¿Eliminar este servicio?')) return;
+  fetch(`${API}/servicios/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then(res => res.json())
+    .then(() => location.reload())
+    .catch(err => alert('Error al eliminar servicio.'));
+}
+
+document.getElementById('form-servicio').addEventListener('submit', e => {
   e.preventDefault();
   const servicio = {
     name: document.getElementById('nombre').value,
     description: document.getElementById('descripcion').value,
     price: document.getElementById('precio').value
   };
-
-  fetch(`${apiUrl}/servicios`, {
+  fetch(`${API}/servicios`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(servicio)
-  }).then(() => location.reload());
+  })
+    .then(res => res.json())
+    .then(() => location.reload())
+    .catch(() => alert('Error al agregar servicio.'));
 });
-
-// Eliminar servicio
-function eliminarServicio(id) {
-  if (!confirm('¿Eliminar este servicio?')) return;
-  fetch(`${apiUrl}/servicios/${id}`, {
-    method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + token }
-  }).then(() => location.reload());
-}
-
-// Editar servicio (simple)
-function editarServicio(id, nombre, descripcion, precio) {
-  const nuevoNombre = prompt('Nuevo nombre:', nombre);
-  const nuevaDescripcion = prompt('Nueva descripción:', descripcion);
-  const nuevoPrecio = prompt('Nuevo precio:', precio);
-
-  fetch(`${apiUrl}/servicios/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    },
-    body: JSON.stringify({
-      name: nuevoNombre,
-      description: nuevaDescripcion,
-      price: nuevoPrecio
-    })
-  }).then(() => location.reload());
-}

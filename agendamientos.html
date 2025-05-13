@@ -4,33 +4,7 @@
   <meta charset="UTF-8">
   <title>Mis Agendamientos</title>
   <link rel="stylesheet" href="css/minimal.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">  
-  <style>
-    .modal {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    }
-
-    .modal-content {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .modal-actions {
-      margin-top: 1rem;
-    }
-
-    .modal-actions button {
-      margin: 0 0.5rem;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -67,7 +41,7 @@
       </table>
       <button onclick="location.href='index.html'" class="btn">Volver al inicio</button>
     </div>
-  </section> 
+  </section>
 
   <!-- Modal para editar fecha -->
   <div id="modal-fecha" class="modal" style="display: none;">
@@ -75,7 +49,7 @@
       <h2>Editar Fecha</h2>
       <input type="datetime-local" id="nueva-fecha" />
       <div class="modal-actions">
-        <button onclick="guardarNuevaFecha()">Guardar</button>
+        <button onclick="confirmarFecha()">Guardar</button>
         <button onclick="cerrarModal()">Cancelar</button>
       </div>
     </div>

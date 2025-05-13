@@ -1,25 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Panel de Administración</title>
-  <link rel="stylesheet" href="css/minimal.css">
+  <link rel="stylesheet" href="css/minimal.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+
   <header class="navbar">
-    <div class="logo">Admin Panel</div>
+    <div class="logo">Panel Admin</div>
     <nav>
       <a href="index.html">Inicio</a>
-      <a href="agendamientos.html">Agendamientos</a>
-      <a href="admin.html">Admin</a>
+      <button id="logout-btn" class="btn-header" title="Cerrar sesión">
+        <i class="fas fa-door-open"></i> Cerrar sesión
+      </button>
     </nav>
   </header>
 
   <section class="hero">
-    <div class="container">
-      <h1>Panel del Administrador</h1>
-      <div id="admin-content">
-        <!-- Aquí puedes mostrar los usuarios y servicios con botones para eliminar o editar -->
+    <div class="container-admin">
+      <h1>Administración</h1>
+      <div class="tabs">
+        <button onclick="mostrarSeccion('usuarios')">Usuarios</button>
+        <button onclick="mostrarSeccion('servicios')">Servicios</button>
+      </div>
+
+      <!-- Sección Usuarios -->
+      <div id="usuarios-section" style="display: none;">
+        <h2>Usuarios Registrados</h2>
+        <table>
+          <thead>
+            <tr><th>Email</th><th>Rol</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="usuarios-list"></tbody>
+        </table>
+      </div>
+
+      <!-- Sección Servicios -->
+      <div id="servicios-section" style="display: none;">
+        <h2>Gestión de Servicios</h2>
+        <form id="form-servicio">
+          <input type="text" id="nombre" placeholder="Nombre" required />
+          <input type="text" id="descripcion" placeholder="Descripción" required />
+          <input type="number" id="precio" placeholder="Precio" required />
+          <button type="submit">Agregar Servicio</button>
+        </form>
+
+        <table>
+          <thead>
+            <tr><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="servicios-list"></tbody>
+        </table>
       </div>
     </div>
   </section>

@@ -1,57 +1,50 @@
+// frontend/js/navbar.js
+
 document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("token");
   const loginLink = document.getElementById("login-link");
   const logoutBtn = document.getElementById("logout-btn");
   const userInfo = document.getElementById("user-info");
   const adminLink = document.getElementById("admin-link");
+  const nombreUsuario = document.getElementById("nombreUsuario");
 
-  if (token) {
-    fetch("https://hamnida-tech.onrender.com/api/usuarios/perfil", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  // Validar sesión activa por cookies
+  fetch("http://localhost:3000/auth/usuario", {
+    method: "GET",
+    credentials: "include"
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("No autenticado");
+      return res.json();
     })
-      .then((res) => res.json())
-      .then((data) => {
-        userInfo.style.display = "inline";
-        userInfo.textContent = data.email;
-        loginLink.style.display = "none";
-        logoutBtn.style.display = "inline";
+    .then(data => {
+      loginLink.style.display = "none";
+      logoutBtn.style.display = "inline";
+      userInfo.style.display = "inline";
 
-        // Mostrar el enlace admin si el usuario tiene rol "admin"
-        if (data.role === "admin") {
-          adminLink.style.display = "inline";
-        }
-      })
-      .catch(() => {
-        console.warn("Error al validar token");
-        localStorage.removeItem("token");
-      });
-  }
+      if (nombreUsuario) {
+        nombreUsuario.textContent = data.usuario.nombre;
+      } else {
+        userInfo.textContent = data.usuario.nombre;
+      }
 
-  logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("token");
-    window.location.href = "index.html";
-  });
-
-// frontend/js/navbar.js
-(async () => {
-  try {
-    const res = await fetch('http://localhost:3000/auth/usuario', {
-      method: 'GET',
-      credentials: 'include'
+      if (data.usuario.rol === "admin") {
+        adminLink.style.display = "inline";
+      }
+    })
+    .catch(() => {
+      console.warn("Sesión no válida o expirada");
     });
 
-    if (!res.ok) throw new Error('No autenticado');
-
-    const data = await res.json();
-    document.getElementById('nombreUsuario').textContent = data.usuario.nombre;
-  } catch (err) {
-    console.error('Error al validar sesión:', err);
-    // Opcional: redirigir a login si no autenticado
-    // window.location.href = '/login.html';
-  }
-})();
-
-  
+  // Cerrar sesión
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      await fetch("http://localhost:3000/auth/logout", {
+        method: "POST",
+        credentials: "include"
+      });
+      window.location.href = "index.html";
+    } catch (err) {
+      console.error("Error al cerrar sesión", err);
+    }
+  });
 });

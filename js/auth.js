@@ -52,6 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+router.get('/usuario', (req, res) => {
+  if (req.session && req.session.usuario) {
+    res.json({ usuario: req.session.usuario });
+  } else {
+    res.status(401).json({ mensaje: 'No autenticado' });
+  }
+});
+
+  
   // REGISTRO
   if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {

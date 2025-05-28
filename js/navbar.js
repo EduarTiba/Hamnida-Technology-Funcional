@@ -33,4 +33,25 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("token");
     window.location.href = "index.html";
   });
+
+// frontend/js/navbar.js
+(async () => {
+  try {
+    const res = await fetch('http://localhost:3000/auth/usuario', {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    if (!res.ok) throw new Error('No autenticado');
+
+    const data = await res.json();
+    document.getElementById('nombreUsuario').textContent = data.usuario.nombre;
+  } catch (err) {
+    console.error('Error al validar sesión:', err);
+    // Opcional: redirigir a login si no autenticado
+    // window.location.href = '/login.html';
+  }
+})();
+
+  
 });

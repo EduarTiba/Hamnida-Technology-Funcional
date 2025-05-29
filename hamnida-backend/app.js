@@ -12,6 +12,8 @@ const serviceRoutes = require('./routes/service.routes');
 const agendamientoRoutes = require('./routes/agendamiento.routes');
 const adminRoutes = require('./routes/admin.routes');
 const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth.routes');
+
 
 const app = express();
 
@@ -56,5 +58,6 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/agendamientos', agendamientoRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/auth', authRoutes);
+
 
 module.exports = app;

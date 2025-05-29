@@ -1,9 +1,7 @@
-// frontend/js/auth.js
-
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const apiBase = isLocalhost
-  ? 'http://localhost:3000/auth'
-  : 'https://hamnida-tech.onrender.com/auth';
+  ? 'http://localhost:5000'
+  : 'https://hamnida-tech.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
@@ -26,20 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        const res = await fetch(`${apiBase}/login`, {
+        const res = await fetch(`${apiBase}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ correo: email.value, contrasena: password.value })
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value
+          }),
+          credentials: 'include' // 🔐 Importante para cookies
         });
 
         const data = await res.json();
-        console.log('Respuesta del servidor:', data);
 
         if (res.ok) {
           window.location.href = 'index.html';
         } else {
-          loginMsg.textContent = data.mensaje || 'Error al iniciar sesión';
+          loginMsg.textContent = data.msg || 'Error al iniciar sesión';
         }
       } catch (error) {
         loginMsg.textContent = 'Error de conexión al servidor.';
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // REGISTRO (si se usa, adaptar a la API actual con sesiones)
+  // REGISTRO
   if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -63,14 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        const res = await fetch(`${apiBase}/register`, {
+        const res = await fetch(`${apiBase}/api/users/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            nombre: name.value,
-            correo: email.value,
-            contrasena: password.value,
-          })
+            name: name.value,
+            email: email.value,
+            password: password.value,
+          }),
+          credentials: 'include'
         });
 
         const data = await res.json();
@@ -79,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
           alert('Registro exitoso. Ahora puedes iniciar sesión.');
           window.location.href = 'login.html';
         } else {
-          registerMsg.textContent = data.mensaje || 'Error al registrarte.';
+          registerMsg.textContent = data.msg || 'Error al registrarte.';
         }
       } catch (error) {
         registerMsg.textContent = 'Error de conexión al servidor.';
